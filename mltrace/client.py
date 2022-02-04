@@ -14,7 +14,6 @@ import sys
 import typing
 import uuid
 
-
 _db_uri = utils.get_db_uri()
 
 # --------------------- Database management functions ------------------- #
@@ -545,7 +544,6 @@ def get_component_run_information(component_run_id: str) -> ComponentRun:
     d.update(
         {"inputs": inputs, "outputs": outputs, "dependencies": dependencies}
     )
-
     return ComponentRun.from_dictionary(d)
 
 
