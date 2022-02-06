@@ -10,6 +10,7 @@ from mltrace import utils as clientUtils
 from mltrace.db import Store, PointerTypeEnum
 from mltrace.entities import utils
 from mltrace.entities.base import Base
+from mltrace.db.wrapper import log_component_run_wrapper
 
 import functools
 import inspect
@@ -444,9 +445,15 @@ class Component(Base):
                 component_run.set_test_result(status)
 
                 # Commit component run object to the DB
-                store.commit_component_run(
-                    component_run, staleness_threshold=staleness_threshold
-                )
+                # store.commit_component_run(
+                #     component_run, staleness_threshold=staleness_threshold
+                # )
+
+                log_component_run_wrapper(
+                    store=store,
+                    component_run=component_run,
+                    staleness_treshold=staleness_threshold)
+
 
                 return value
 

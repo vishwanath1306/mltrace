@@ -50,6 +50,9 @@ services:
       services-network:
         aliases:
           - api
+
+  redis-celery: 
+    image: redis:latest
   
 volumes:  
   postgres_data:

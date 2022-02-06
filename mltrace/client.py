@@ -2,6 +2,7 @@ from datetime import datetime
 from mltrace import utils
 from mltrace.db import Store, PointerTypeEnum
 from mltrace.db.utils import _get_data_and_model_args, _load, _save
+from mltrace.db.wrapper import log_component_run_wrapper
 from mltrace.entities import Component, ComponentRun, IOPointer
 
 import copy
@@ -13,6 +14,7 @@ import os
 import sys
 import typing
 import uuid
+
 
 _db_uri = utils.get_db_uri()
 
@@ -134,8 +136,15 @@ def log_component_run(
         cr = store.get_history(dependency, 1)[0]
         component_run_sql.set_upstream(cr)
 
-    store.commit_component_run(
-        component_run_sql, staleness_threshold=staleness_threshold
+
+    # store.commit_component_run(
+    #     component_run_sql, staleness_threshold=staleness_threshold
+    # )
+
+    log_component_run_wrapper(
+        store=store,
+        component_run=component_run_sql,
+        staleness_treshold=staleness_threshold
     )
 
 
@@ -404,8 +413,14 @@ def register(
             store.set_dependencies_from_inputs(component_run)
 
             # Commit component run object to the DB
-            store.commit_component_run(
-                component_run, staleness_threshold=staleness_threshold
+            # store.commit_component_run(
+            #     component_run, staleness_threshold=staleness_threshold
+            # )
+
+            log_component_run_wrapper(
+                store=store,
+                component_run=component_run,
+                staleness_treshold=staleness_threshold
             )
 
             return value
